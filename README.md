@@ -2,7 +2,7 @@
 
 **Cold-chain temperature monitoring and excursion review.** ColdTrace ingests sensor readings from trucks and warehouses in near real time, detects temperature excursions with transparent rules, and gives quality reviewers a case file with all the evidence they need to make a decision.
 
-> **Status:** early development, following a 7-week roadmap (see below). No application code yet. All sensors and shipments are simulated; this is not a validated GxP system and makes no regulatory compliance claims.
+> **Status:** early development, following a 7-week roadmap (see below). All sensors and shipments are simulated; this is not a validated GxP system and makes no regulatory compliance claims.
 
 ## The problem
 
@@ -109,3 +109,9 @@ coldtrace/
 ## Getting started
 
 Setup instructions will be added once the first services are in place.
+
+## Documentation
+
+- [Charter, personas and glossary](docs/charter.md)
+- [Rule catalog (draft)](docs/rules/catalog.md)
+- [ADR 0001: one Go module, several binaries](docs/adr/0001-one-go-module-several-binaries.md)
