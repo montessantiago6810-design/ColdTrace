@@ -88,3 +88,33 @@ func TestLoadRejectsUnparsableTimeout(t *testing.T) {
 		}
 	}
 }
+
+func TestLoadDatabaseURL(t *testing.T) {
+	const dsn = "postgres://coldtrace:secret@127.0.0.1:5432/coldtrace?sslmode=disable"
+	cfg, err := Load(env(map[string]string{"COLDTRACE_DATABASE_URL": dsn}))
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if cfg.DatabaseURL != dsn {
+		t.Fatalf("DatabaseURL = %q, want %q", cfg.DatabaseURL, dsn)
+	}
+	if err := cfg.RequireDatabase(); err != nil {
+		t.Fatalf("RequireDatabase: %v", err)
+	}
+	if err := Defaults().RequireDatabase(); err == nil {
+		t.Fatal("RequireDatabase without a URL: expected an error")
+	}
+}
+
+func TestLoadRejectsInvalidDatabaseURLWithoutEchoingIt(t *testing.T) {
+	for _, v := range []string{"mysql://u:hunter2@db/x", "postgres:///nohost", "hunter2"} {
+		_, err := Load(env(map[string]string{"COLDTRACE_DATABASE_URL": v}))
+		if err == nil {
+			t.Errorf("%q: expected an error", v)
+			continue
+		}
+		if strings.Contains(err.Error(), "hunter2") {
+			t.Errorf("error leaks the value: %v", err)
+		}
+	}
+}

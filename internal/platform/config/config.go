@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -22,6 +23,17 @@ type Config struct {
 	LogFormat string
 	// ShutdownTimeout bounds graceful shutdown after SIGINT/SIGTERM.
 	ShutdownTimeout time.Duration
+	// DatabaseURL is the PostgreSQL connection string. It is optional here;
+	// binaries that need the database call RequireDatabase.
+	DatabaseURL string
+}
+
+// RequireDatabase reports an error when no database URL is configured.
+func (c Config) RequireDatabase() error {
+	if c.DatabaseURL == "" {
+		return errors.New("COLDTRACE_DATABASE_URL: required")
+	}
+	return nil
 }
 
 // Defaults returns the configuration used when no variables are set.
@@ -89,6 +101,16 @@ func Load(lookup LookupFunc) (Config, error) {
 			errs = append(errs, fmt.Errorf("COLDTRACE_SHUTDOWN_TIMEOUT: must be between 0s and 5m, got %s", d))
 		default:
 			cfg.ShutdownTimeout = d
+		}
+	}
+
+	if v, ok := get(lookup, "COLDTRACE_DATABASE_URL"); ok {
+		// The URL is never echoed back: it usually carries a password.
+		u, err := url.Parse(v)
+		if err != nil || (u.Scheme != "postgres" && u.Scheme != "postgresql") || u.Host == "" {
+			errs = append(errs, errors.New("COLDTRACE_DATABASE_URL: must be a postgres:// URL with a host"))
+		} else {
+			cfg.DatabaseURL = v
 		}
 	}
 
