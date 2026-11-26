@@ -1,0 +1,23 @@
+# Go
+/bin/
+*.test
+*.out
+coverage.*
+go.work
+go.work.sum
+
+# Node / SvelteKit
+node_modules/
+.svelte-kit/
+build/
+
+# Environment and local data
+.env
+.env.*
+!.env.example
+*.local
+
+# Editors and OS
+.idea/
+.vscode/
+.DS_Store

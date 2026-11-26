@@ -2,7 +2,7 @@
 
 **Cold-chain temperature monitoring and excursion review.** ColdTrace ingests sensor readings from trucks and warehouses in near real time, detects temperature excursions with transparent rules, and gives quality reviewers a case file with all the evidence they need to make a decision.
 
-> **Status:** early development, following a 7-week roadmap (see below). No application code yet. All sensors and shipments are simulated; this is not a validated GxP system and makes no regulatory compliance claims.
+> **Status:** early development, following a 7-week roadmap (see below). All sensors and shipments are simulated; this is not a validated GxP system and makes no regulatory compliance claims.
 
 ## The problem
 
@@ -98,7 +98,7 @@ coldtrace/
 
 | Week | Focus | Status |
 |---|---|---|
-| Week 1 | **Domain design & Go/SvelteKit bootstrap** — Add charter, rule catalog draft, ADR 0001 and Go API skeleton, scaffold SvelteKit dashboard, Compose stack and sqlc queries | Planned |
+| Week 1 | **Domain design & Go/SvelteKit bootstrap** — Add charter, rule catalog draft, ADR 0001 and Go API skeleton, scaffold SvelteKit dashboard, Compose stack and sqlc queries | ✅ Done |
 | Week 2 | **Orgs, device registry & ingestion** — Add orgs, session auth and device registry with broker ACLs, add readings hypertable, MQTT ingestor and fleet simulator, add gateway backfill endpoint and ingestion tests | Planned |
 | Week 3 | **Shipments, profiles & assignments** — Add versioned product profiles and shipment lifecycle, add non-overlapping device assignments and shipment views, add continuous aggregate rollups | Planned |
 | Week 4 | **Rule engine, MKT & alerts** — Add pure excursion, gap and MKT rules with golden fixtures, add windowed evaluator with watermarks and alerts, add acknowledgment and escalation | Planned |
@@ -108,4 +108,19 @@ coldtrace/
 
 ## Getting started
 
-Setup instructions will be added once the first services are in place.
+Requires Go 1.26, Node.js 22.17+, Docker with Compose and GNU Make.
+
+```sh
+cp .env.example .env   # set POSTGRES_PASSWORD
+make dev               # Compose stack, migrations, API on :8080, dashboard on :5173
+make check             # vet, lint, tests, sqlc diff, svelte-check, Vitest
+```
+
+See [docs/setup.md](docs/setup.md) for every target, the environment variables and CI.
+
+## Documentation
+
+- [Local setup, environment variables and CI](docs/setup.md)
+- [Charter, personas and glossary](docs/charter.md)
+- [Rule catalog (draft)](docs/rules/catalog.md)
+- [ADR 0001: one Go module, several binaries](docs/adr/0001-one-go-module-several-binaries.md)

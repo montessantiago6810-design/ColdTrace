@@ -1,0 +1,41 @@
+# Local development stack: TimescaleDB and the MQTT broker.
+# The Go binaries and the SvelteKit dev server run on the host.
+# Ports are bound to 127.0.0.1 so nothing is exposed beyond this machine.
+name: coldtrace
+
+services:
+  db:
+    image: timescale/timescaledb:2.32.1-pg17
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-coldtrace}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env (see .env.example)}
+      POSTGRES_DB: ${POSTGRES_DB:-coldtrace}
+      TIMESCALEDB_TELEMETRY: "off"
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0.23
+    ports:
+      - "127.0.0.1:${MQTT_PORT:-1883}:1883"
+    volumes:
+      - ./deploy/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto-data:/mosquitto/data
+    healthcheck:
+      test: ["CMD", "mosquitto_sub", "-h", "127.0.0.1", "-t", "$$SYS/broker/uptime", "-C", "1", "-W", "3"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  db-data:
+  mosquitto-data:

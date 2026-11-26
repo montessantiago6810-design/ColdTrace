@@ -1,0 +1,138 @@
+:root {
+	--ct-ink: #14212b;
+	--ct-muted: #4f5d68;
+	--ct-surface: #ffffff;
+	--ct-page: #f3f6f8;
+	--ct-border: #d5dde3;
+	--ct-brand: #0b4f6c;
+	--ct-ok: #1d6b3a;
+	--ct-alert: #a12c2c;
+	font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+	color: var(--ct-ink);
+	background: var(--ct-page);
+	line-height: 1.5;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+a {
+	color: var(--ct-brand);
+}
+
+:focus-visible {
+	outline: 3px solid var(--ct-brand);
+	outline-offset: 2px;
+}
+
+.skip {
+	position: absolute;
+	left: -999px;
+}
+
+.skip:focus {
+	left: 1rem;
+	top: 1rem;
+	background: var(--ct-surface);
+	padding: 0.5rem;
+}
+
+header {
+	display: flex;
+	align-items: center;
+	gap: 2rem;
+	padding: 0.75rem 1.5rem;
+	background: var(--ct-surface);
+	border-bottom: 1px solid var(--ct-border);
+}
+
+header ul {
+	display: flex;
+	gap: 1rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+header nav a[aria-current='page'] {
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.brand {
+	font-weight: 700;
+	font-size: 1.15rem;
+	text-decoration: none;
+}
+
+.account {
+	margin-left: auto;
+}
+
+main {
+	flex: 1;
+	width: 100%;
+	max-width: 64rem;
+	margin: 0 auto;
+	padding: 1.5rem;
+}
+
+footer {
+	padding: 1rem 1.5rem;
+	color: var(--ct-muted);
+	font-size: 0.875rem;
+	border-top: 1px solid var(--ct-border);
+}
+
+.card {
+	background: var(--ct-surface);
+	border: 1px solid var(--ct-border);
+	border-radius: 0.5rem;
+	padding: 1rem 1.25rem;
+	margin-bottom: 1rem;
+}
+
+.status-ok {
+	color: var(--ct-ok);
+}
+
+.status-down {
+	color: var(--ct-alert);
+}
+
+form label {
+	display: block;
+	margin-bottom: 0.75rem;
+}
+
+form input {
+	display: block;
+	width: 100%;
+	max-width: 22rem;
+	padding: 0.5rem;
+	border: 1px solid var(--ct-border);
+	border-radius: 0.25rem;
+	font: inherit;
+}
+
+button {
+	padding: 0.5rem 1rem;
+	border: 0;
+	border-radius: 0.25rem;
+	background: var(--ct-brand);
+	color: #fff;
+	font: inherit;
+	cursor: pointer;
+}
+
+[role='alert'] {
+	color: var(--ct-alert);
+}
