@@ -108,10 +108,19 @@ coldtrace/
 
 ## Getting started
 
-Setup instructions will be added once the first services are in place.
+Requires Go 1.26, Node.js 22.17+, Docker with Compose and GNU Make.
+
+```sh
+cp .env.example .env   # set POSTGRES_PASSWORD
+make dev               # Compose stack, migrations, API on :8080, dashboard on :5173
+make check             # vet, lint, tests, sqlc diff, svelte-check, Vitest
+```
+
+See [docs/setup.md](docs/setup.md) for every target, the environment variables and CI.
 
 ## Documentation
 
+- [Local setup, environment variables and CI](docs/setup.md)
 - [Charter, personas and glossary](docs/charter.md)
 - [Rule catalog (draft)](docs/rules/catalog.md)
 - [ADR 0001: one Go module, several binaries](docs/adr/0001-one-go-module-several-binaries.md)
